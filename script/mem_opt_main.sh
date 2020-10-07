@@ -149,12 +149,12 @@ lock_val "120" $VM/vfs_cache_pressure
 #change_task_affinity "kswapd" "7f"
 #change_task_affinity "oom_reaper" "7f"
 
-#fscc_stop
+fscc_stop
 #fscc_start
 
 # start adjshield
 #[ ! -f "$adjshield_cfg" ] && adjshield_create_default_cfg
-#adjshield_stop
+adjshield_stop
 #adjshield_start
 
 # save mode for automatic applying mode after reboot
