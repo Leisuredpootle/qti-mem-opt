@@ -19,6 +19,10 @@ mod_perfconfigstore()
             re_src='Name="ro\.vendor\.qti\.sys\.fw\.bservice_limit" Value="[0-9]*"'
             re_dst='Name="ro\.vendor\.qti\.sys\.fw\.bservice_limit" Value="60"'
             sed -i "s/$re_src/$re_dst/g" "$perfconfigstore"
+            # Disable gestureflingboost
+            re_src='Name="vendor\.perf\.gestureflingboost\.enable" Value="true"'
+            re_dst='Name="vendor\.perf\.gestureflingboost\.enable" Value="false"'
+            sed -i "s/$re_src/$re_dst/g" "$perfconfigstore"
         fi
     fi
 }
