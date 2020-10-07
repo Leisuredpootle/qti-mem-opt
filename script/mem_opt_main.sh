@@ -144,10 +144,10 @@ lock_val "30" $VM/watermark_scale_factor
 lock_val "120" $VM/vfs_cache_pressure
 
 # kernel reclaim threads run on more power-efficient cores
-change_task_nice "kswapd" "-2"
-change_task_nice "oom_reaper" "-2"
-change_task_affinity "kswapd" "7f"
-change_task_affinity "oom_reaper" "7f"
+#change_task_nice "kswapd" "-2"
+#change_task_nice "oom_reaper" "-2"
+#change_task_affinity "kswapd" "7f"
+#change_task_affinity "oom_reaper" "7f"
 
 # similiar to PinnerService, Mlock(Unevictable) 200~350MB
 fscc_add_obj "$SYS_FRAME/framework.jar"
