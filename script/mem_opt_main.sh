@@ -110,28 +110,12 @@ save_panel()
 # copy of common\system.prop
 setprop ro.vendor.qti.sys.fw.bg_apps_limit 600
 setprop ro.vendor.qti.sys.fw.bservice_limit 60
-# disable memplus prefetcher which ram-boost relying on, use traditional swapping
-setprop persist.vendor.sys.memplus.enable "false"
-lock_val "0" /sys/module/memplus_core/parameters/memory_plus_enabled
-lock_val "0" /proc/sys/vm/memory_plus
 
 # we don't know when system will init ZRAM
 mem_stop_zram
 wait_until_login
 mem_stop_zram
 
-# disable oneplus mods which kill apps fast
-lock_val "0" $LMK/batch_kill
-lock_val "0" $LMK/quick_select
-lock_val "0" $LMK/time_measure
-lock_val "N" $LMK/trust_adj_chain
-# disable memplus prefetcher which ram-boost relying on, use traditional swapping
-setprop persist.vendor.sys.memplus.enable "false"
-lock_val "0" /sys/module/memplus_core/parameters/memory_plus_enabled
-lock_val "0" /proc/sys/vm/memory_plus
-# disable oneplus kswapd modification
-lock_val "0" $VM/breath_period
-lock_val "-1001" $VM/breath_priority
 # disable Qualcomm per process reclaim for low-tier or mid-tier devices
 lock_val "0" /sys/module/process_reclaim/parameters/enable_process_reclaim
 
