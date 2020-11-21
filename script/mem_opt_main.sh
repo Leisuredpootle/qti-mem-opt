@@ -79,11 +79,33 @@ config_zram()
     zram_alg="$(mem_get_cur_comp_alg)"
 }
 
-
-
-# copy of common\system.prop
-setprop ro.vendor.qti.sys.fw.bg_apps_limit 600
-setprop ro.vendor.qti.sys.fw.bservice_limit 60
+save_panel()
+{
+    clear_panel
+    write_panel ""
+    write_panel "QTI memory optimization"
+    write_panel "https://github.com/yc9559/qti-mem-opt"
+    write_panel "Author: Matt Yang"
+    write_panel "Version: v7.1 (20200328)"
+    write_panel "Last performed: $(date '+%Y-%m-%d %H:%M:%S')"
+    write_panel ""
+    write_panel "[ZRAM status]"
+    write_panel "$(mem_zram_status)"
+    write_panel ""
+    write_panel "[FSCC status]"
+    write_panel "$(fscc_status)"
+    write_panel ""
+    write_panel "[AdjShield status]"
+    write_panel "$(adjshield_status)"
+    write_panel ""
+    write_panel "[Settings]"
+    write_panel "# Available size(GB): 0 / 0.5 / 1 / 1.5 / 2 / 2.5 / 3 / 4 / 5 / 6"
+    write_panel "zram_size=$zram_size"
+    write_panel "# Available compression algorithm: $ZRAM_ALGS"
+    write_panel "zram_alg=$zram_alg"
+    write_panel "# AdjShield config file path"
+    write_panel "adjshield_cfg=$adjshield_cfg"
+}
 
 # we don't know when system will init ZRAM
 mem_stop_zram
@@ -117,11 +139,6 @@ lock_val "30" $VM/watermark_scale_factor
 # drop a little more inode cache
 lock_val "120" $VM/vfs_cache_pressure
 
-# kernel reclaim threads run on more power-efficient cores
-#change_task_nice "kswapd" "-2"
-#change_task_nice "oom_reaper" "-2"
-#change_task_affinity "kswapd" "7f"
-#change_task_affinity "oom_reaper" "7f"
 
 fscc_stop
 #fscc_start
@@ -132,33 +149,6 @@ adjshield_stop
 #adjshield_start
 
 # save mode for automatic applying mode after reboot
-save_panel()
-{
-    clear_panel
-    write_panel ""
-    write_panel "QTI memory optimization"
-    write_panel "https://github.com/yc9559/qti-mem-opt"
-    write_panel "Author: Matt Yang"
-    write_panel "Version: v7.1 (20200328)"
-    write_panel "Last performed: $(date '+%Y-%m-%d %H:%M:%S')"
-    write_panel ""
-    write_panel "[ZRAM status]"
-    write_panel "$(mem_zram_status)"
-    write_panel ""
-    write_panel "[FSCC status]"
-    write_panel "$(fscc_status)"
-    write_panel ""
-    write_panel "[AdjShield status]"
-    write_panel "$(adjshield_status)"
-    write_panel ""
-    write_panel "[Settings]"
-    write_panel "# Available size(GB): 0 / 0.5 / 1 / 1.5 / 2 / 2.5 / 3 / 4 / 5 / 6"
-    write_panel "zram_size=$zram_size"
-    write_panel "# Available compression algorithm: $ZRAM_ALGS"
-    write_panel "zram_alg=$zram_alg"
-    write_panel "# AdjShield config file path"
-    write_panel "adjshield_cfg=$adjshield_cfg"
-}
 save_panel
 
 exit 0

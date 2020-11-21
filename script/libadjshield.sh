@@ -64,7 +64,7 @@ adjshield_status()
         if [ "$err" != "" ]; then
             echo "Not running.$err."
         else
-            echo "Not running."
+            echo "Not running. Unknown reason."
         fi
     fi
 }
