@@ -57,9 +57,7 @@ adjshield_status()
 {
     local err
     if [ "$(ps -A | grep "$ADJSHIELD_NAME")" != "" ]; then
-     if [ "$(ps -A | grep "$ADJSHIELD_NAME")" != "1" ]; then
         echo "Running. See $adjshield_log for details."
-     else
     else
         # "Error: Log file not found"
         err="$(cat "$adjshield_log" | grep Error | head -n 1 | cut -d: -f2)"

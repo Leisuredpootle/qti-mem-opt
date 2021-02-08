@@ -107,11 +107,31 @@ save_panel()
     write_panel "adjshield_cfg=$adjshield_cfg"
 }
 
+# copy of common\system.prop
+#setprop ro.vendor.qti.sys.fw.bg_apps_limit 600
+#setprop ro.vendor.qti.sys.fw.bservice_limit 60
+# disable memplus prefetcher which ram-boost relying on, use traditional swapping
+#setprop persist.vendor.sys.memplus.enable "false"
+#lock_val "0" /sys/module/memplus_core/parameters/memory_plus_enabled
+#lock_val "0" /proc/sys/vm/memory_plus
+
 # we don't know when system will init ZRAM
 mem_stop_zram
 wait_until_login
 mem_stop_zram
 
+# disable oneplus mods which kill apps fast
+#lock_val "0" $LMK/batch_kill
+#lock_val "0" $LMK/quick_select
+#lock_val "0" $LMK/time_measure
+#lock_val "N" $LMK/trust_adj_chain
+# disable memplus prefetcher which ram-boost relying on, use traditional swapping
+#setprop persist.vendor.sys.memplus.enable "false"
+#lock_val "0" /sys/module/memplus_core/parameters/memory_plus_enabled
+#lock_val "0" /proc/sys/vm/memory_plus
+# disable oneplus kswapd modification
+#lock_val "0" $VM/breath_period
+#lock_val "-1001" $VM/breath_priority
 # disable Qualcomm per process reclaim for low-tier or mid-tier devices
 lock_val "0" /sys/module/process_reclaim/parameters/enable_process_reclaim
 
@@ -139,7 +159,45 @@ lock_val "30" $VM/watermark_scale_factor
 # drop a little more inode cache
 lock_val "120" $VM/vfs_cache_pressure
 
+# kernel reclaim threads run on more power-efficient cores
+#change_task_nice "kswapd" "-2"
+#change_task_nice "oom_reaper" "-2"
+#change_task_affinity "kswapd" "7f"
+#change_task_affinity "oom_reaper" "7f"
 
+# similiar to PinnerService, Mlock(Unevictable) 200~350MB
+#fscc_add_obj "$SYS_FRAME/framework.jar"
+#fscc_add_obj "$SYS_FRAME/services.jar"
+#fscc_add_obj "$SYS_FRAME/ext.jar"
+#fscc_add_obj "$SYS_FRAME/telephony-common.jar"
+#fscc_add_obj "$SYS_FRAME/qcnvitems.jar"
+#fscc_add_obj "$SYS_FRAME/oat"
+#fscc_add_obj "$SYS_FRAME/arm64"
+#fscc_add_obj "$SYS_FRAME/arm/boot-framework.oat"
+#fscc_add_obj "$SYS_FRAME/arm/boot-framework.vdex"
+#fscc_add_obj "$SYS_FRAME/arm/boot.oat"
+#fscc_add_obj "$SYS_FRAME/arm/boot.vdex"
+#fscc_add_obj "$SYS_FRAME/arm/boot-core-libart.oat"
+#fscc_add_obj "$SYS_FRAME/arm/boot-core-libart.vdex"
+#fscc_add_obj "$SYS_LIB/libandroid_servers.so"
+#fscc_add_obj "$SYS_LIB/libandroid_runtime.so"
+#fscc_add_obj "$SYS_LIB/libandroidfw.so"
+#fscc_add_obj "$SYS_LIB/libandroid.so"
+#fscc_add_obj "$SYS_LIB/libhwui.so"
+#fscc_add_obj "$SYS_LIB/libjpeg.so"
+#fscc_add_obj "$VDR_LIB/libssc.so"
+#fscc_add_obj "$VDR_LIB/libgsl.so"
+#fscc_add_obj "$VDR_LIB/sensors.ssc.so"
+#fscc_add_apex_lib "core-oj.jar"
+#fscc_add_apex_lib "core-libart.jar"
+#fscc_add_apex_lib "updatable-media.jar"
+#fscc_add_apex_lib "okhttp.jar"
+#fscc_add_apex_lib "bouncycastle.jar"
+# do not pin too many files on low memory devices
+#[ "$TMEM" -gt 2098652 ] && fscc_add_apk "com.android.systemui"
+#[ "$TMEM" -gt 2098652 ] && fscc_add_dex "com.android.systemui"
+#[ "$TMEM" -gt 4197304 ] && fscc_add_app_home
+#[ "$TMEM" -gt 4197304 ] && fscc_add_app_ime
 fscc_stop
 #fscc_start
 

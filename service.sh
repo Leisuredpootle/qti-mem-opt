@@ -12,7 +12,3 @@ fi
 
 # not relying on executable permissions
 sh $SCRIPT_DIR/mem_opt_main.sh
-
-resetprop -p --delete ro.vendor.extension_library
-stop iop
-stop vendor.iop
